@@ -132,3 +132,16 @@ fetch("http://localhost:9292/test")
 [dbdiagram.io]: https://dbdiagram.io/
 [postman download]: https://www.postman.com/downloads/
 [network tab]: https://developer.chrome.com/docs/devtools/network/
+
+Phase-3-Project Outline
+
+  The web application is a mock up of a Video Game review site that will contain 
+  user reviews, games and, users. The application will have the folowing relationships: 
+  
+  / games has_many reviews through users /
+  / users has_many reviews /
+
+  The data will be seeded using Faker
+
+  
+  
