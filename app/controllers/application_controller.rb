@@ -20,28 +20,43 @@ class ApplicationController < Sinatra::Base
     comic.to_json(include: :reviews) 
   end
 
+  get "/comics/:id/:reviews" do
+    comic = Comic.find(params[:id])
+    reviews = comic.reviews
+    reviews.to_json  
+  end
+
   get "/reviews" do
     review = Review.all
     review.to_json
   end
 
-  get "/reviews/:id" do
-    review = Review.find(params[:id])
+  get "/reviews/:comic_id" do
+    review = Review.find(params[:comic_id])
     review.to_json
   end
 
-  get "/reviews/by_rating" do
-    reviews = Reviews.by_rating
-    reviews.to_json
-  end
-
-  post '/reviews' do 
-    reviews = Review.create(
+  post "/reviews" do 
+    comic = Comic.find(params[:comic_id])
+    review = comic.reviews.create(
       body: params[:body],
       rating: params[:rating],
-      comic_id: params[:comic_id]
     )
-    reviews.to_json
+    review.to_json  
+  end
+
+  post "/comics" do
+    comic = Comic.create(
+      name: params[:name],
+      reviews: params[:reviews]
+    )
+    comic.to_json
+  end
+
+  delete "/comics/:id" do
+    comics = Comic.find(params[:id])
+    comics.destroy
+    comics.to_json
   end
 
   delete "/reviews/:id" do
@@ -51,10 +66,11 @@ class ApplicationController < Sinatra::Base
   end
 
   patch "/reviews/:id" do
-    reviews = Review.find(params[:id])
-    reviews.update(
+    comic = Comic.find(params[:comic_id])
+    review = comic.reviews.find(params[:id])
+    review.update(
       body: params[:body],
-      rating: params[:rating]
+      rating: params[:rating],
     ) 
     reviews.to_json
   end
