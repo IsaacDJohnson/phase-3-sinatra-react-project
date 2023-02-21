@@ -7,17 +7,15 @@ class ApplicationController < Sinatra::Base
     "Comic API
     use endpoints: 
     /comics for list of comics with IDs
-    /reviews for list of reviews with IDs and ratings at by_rating"
+    /reviews for list of reviews with IDs"
   end
 
   get "/comics" do
-    comics = Comic.all
-    comics.to_json(include: :reviews)
+    Comic.all.to_json(include: :reviews)
   end
 
   get "/comics/:id" do
-    comic = Comic.find(params[:id])
-    comic.to_json(include: :reviews) 
+    Comic.find_comic_with_id(params[:id]).to_json(include: :reviews) 
   end
 
   get "/comics/:id/:reviews" do
@@ -27,8 +25,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get "/reviews" do
-    review = Review.all
-    review.to_json
+    Review.all.to_json
   end
 
   get "/reviews/:comic_id" do
@@ -47,21 +44,19 @@ class ApplicationController < Sinatra::Base
 
   post "/comics" do
     comic = Comic.create(
-      name: params[:name],
+      name: params[:name], 
       reviews: params[:reviews]
     )
     comic.to_json
   end
 
   delete "/comics/:id" do
-    comics = Comic.find(params[:id])
-    comics.destroy
+    comics = Comic.comic_delete(params[:id])
     comics.to_json
   end
 
   delete "/reviews/:id" do
-    reviews = Review.find(params[:id])
-    reviews.destroy
+    reviews = Review.delete_by_id(params[:id])
     reviews.to_json
   end
 
@@ -72,7 +67,7 @@ class ApplicationController < Sinatra::Base
       body: params[:body],
       rating: params[:rating],
     ) 
-    reviews.to_json
+    review.to_json
   end
 
 end

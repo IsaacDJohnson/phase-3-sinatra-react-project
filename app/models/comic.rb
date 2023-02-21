@@ -1,16 +1,12 @@
 class Comic < ActiveRecord::Base
   has_many :reviews
 
-  def self.first_comic
-    Comic.first
+  def self.comic_delete(id)
+    Comic.find(id).destroy
   end
 
-  def self.find_comic_with_id
+  def self.find_comic_with_id(id)
     Comic.find_by(id)
   end  
-
-  def self.update_review(review)
-    Comic.update(review: review)
-  end
  
 end
